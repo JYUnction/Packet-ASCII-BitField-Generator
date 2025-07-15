@@ -114,11 +114,6 @@ generateBitfieldDiagram([
     { label: "Source MAC Address", length: 48 },
     { label: "EtherType 802.1Q", length: 16 },
     { label: "PCP/DEI/VID", length: 16 },
-    { label: "INT EtherType", length: 16 },
-    { label: "INT Hop 2 Data (32 bit)", length: 32 },
-    { label: "INT Hop 1 Data (32 bit)", length: 32 },
-    { label: "INT Summary 2", length: 64 },
-    { label: "INT Summary 1", length: 64 },
     { label: "Standard EtherType", length: 16 },
     { label: "IP Payload", length: 32 },
 ])
