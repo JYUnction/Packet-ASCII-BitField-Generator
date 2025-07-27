@@ -1,6 +1,56 @@
-const fs = require('fs')
+let rowIdCounter = 0;
 
-function generateBitfieldDiagram(fields) {
+function addRow(label = '', length = '') {
+  const row = document.createElement('div');
+  row.classList.add('bitfield-row');
+  row.dataset.rowId = rowIdCounter;
+
+  row.innerHTML = `
+    <input type="text" placeholder="Label" value="${label}" />
+    <input type="number" placeholder="Bit Length" value="${length}" />
+    <button type="button" onclick="deleteRow(${rowIdCounter})">Delete</button>
+    <button type="button" onclick="moveRow(${rowIdCounter}, -1)">&#8593;</button>
+    <button type="button" onclick="moveRow(${rowIdCounter}, 1)">&#8595;</button>
+  `;
+
+  document.getElementById('bitfield-rows').appendChild(row);
+  rowIdCounter++;
+}
+
+function deleteRow(id) {
+  const row = document.querySelector(`[data-row-id="${id}"]`);
+  if (row) row.remove();
+}
+
+function moveRow(id, direction) {
+  const row = document.querySelector(`[data-row-id="${id}"]`);
+  if (!row) return;
+  const parent = row.parentElement;
+  if (direction === -1 && row.previousElementSibling) {
+    parent.insertBefore(row, row.previousElementSibling);
+  } else if (direction === 1 && row.nextElementSibling) {
+    parent.insertBefore(row.nextElementSibling, row);
+  }
+}
+
+function generateOutput() {
+    const inputRows = document.querySelectorAll('.bitfield-row');
+    const fields = [];
+
+    inputRows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        const label = inputs[0].value.trim();
+        const length = parseInt(inputs[1].value);
+        if (label && length > 0) {
+            if (label.length > Math.ceil(length*2-1)) {
+                alert(`Label "${label}" is too long for its bit length (${length} bits).\nMinimum ${Math.ceil(label.length/2)} bits.`);
+            }
+            fields.push({ label, length });
+        }
+    });
+
+    
+
     const totalBits = fields.reduce((sum, f) => sum + f.length, 0)
     const rows = Math.ceil(totalBits / 32)
 
@@ -105,25 +155,16 @@ function generateBitfieldDiagram(fields) {
     }
 
     output += "".padEnd(64, "+-") + "+\n"
-    fs.writeFileSync("output.txt", output, 'utf-8')
+  document.getElementById('output').textContent = output;
 }
 
-// Example usage
-generateBitfieldDiagram([
-    { label: "Destination MAC Address", length: 48 },
-    { label: "Source MAC Address", length: 48 },
-    { label: "Standard EtherType", length: 16 },
-    { label: "Version", length: 4 },
-    { label: "IHL", length: 4 },
-    { label: "DSCP", length: 6 },
-    { label: "ECN", length: 2 },
-    { label: "Total Length", length: 16 },
-    { label: "Identification", length: 16 },
-    { label: "Flags", length: 3 },
-    { label: "Fragment Offset", length: 13 },
-    { label: "TTL", length: 8 },
-    { label: "Protocol", length: 8 },
-    { label: "Header Checksum", length: 16 },
-    { label: "Source IP Address", length: 32 },
-    { label: "Destination IP Address", length: 32 }
-])
+function copyOutput() {
+  const text = document.getElementById('output').textContent;
+  navigator.clipboard.writeText(text)
+    .then(() => alert('Copied to clipboard'))
+    .catch(err => alert('Failed to copy: ' + err));
+}
+
+addRow("Destination Addr","48")
+addRow("Source Addr","48")
+addRow("EtherType","16")
