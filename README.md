@@ -1,3 +1,6 @@
+Try it yourself!
+https://bitfield.jyu.one/
+
 Sample Input:
 ```
     { label: "Destination MAC Address", length: 48 },
