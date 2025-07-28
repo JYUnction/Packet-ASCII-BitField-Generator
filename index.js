@@ -1,6 +1,21 @@
 const fs = require('fs')
 
 function generateBitfieldDiagram(fields) {
+    const inputRows = document.querySelectorAll('.bitfield-row');
+    const fields = [];
+
+    inputRows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        const label = inputs[0].value.trim();
+        const length = parseInt(inputs[1].value);
+        if ( label && length > 0 ) {
+            if ( length * 2 - 1 < label.length ) {
+                alert(`Label "${label}" is too long for its bit length (${length} bits).\nMinimum ${Math.ceil((label.length+1)/2)} bits.`);
+            }
+            fields.push({ label, length });
+        }
+    });
+
     const totalBits = fields.reduce((sum, f) => sum + f.length, 0)
     const rows = Math.ceil(totalBits / 32)
 
@@ -112,8 +127,18 @@ function generateBitfieldDiagram(fields) {
 generateBitfieldDiagram([
     { label: "Destination MAC Address", length: 48 },
     { label: "Source MAC Address", length: 48 },
-    { label: "EtherType 802.1Q", length: 16 },
-    { label: "PCP/DEI/VID", length: 16 },
     { label: "Standard EtherType", length: 16 },
-    { label: "IP Payload", length: 32 },
+    { label: "Version", length: 4 },
+    { label: "IHL", length: 4 },
+    { label: "DSCP", length: 6 },
+    { label: "ECN", length: 2 },
+    { label: "Total Length", length: 16 },
+    { label: "Identification", length: 16 },
+    { label: "Flags", length: 3 },
+    { label: "Fragment Offset", length: 13 },
+    { label: "TTL", length: 8 },
+    { label: "Protocol", length: 8 },
+    { label: "Header Checksum", length: 16 },
+    { label: "Source IP Address", length: 32 },
+    { label: "Destination IP Address", length: 32 }
 ])
