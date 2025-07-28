@@ -1,0 +1,24 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Packet Bitfield Editor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Packet Bitfield Editor</h1>
+    <form id="bitfield-form">
+      <div id="bitfield-rows"></div>
+      <button type="button" onclick="addRow()">Add Row</button>
+    </form>
+    <button type="button" onclick="generateOutput()">Generate</button>
+    <button id="copy-button" onclick="copyOutput()">Copy Output</button>
+    <pre id="output"></pre>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
